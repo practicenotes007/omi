@@ -2,13 +2,15 @@ name: Android Debug Build
 
 on:
   push:
-    branches: [main]
+    branches: [main, demo-offline]
     paths:
       - 'app/**'
+      - '.github/workflows/android_debug_build.yml'
   pull_request:
-    branches: [main]
+    branches: [main, demo-offline]
     paths:
       - 'app/**'
+      - '.github/workflows/android_debug_build.yml'
   workflow_dispatch:
 
 jobs:

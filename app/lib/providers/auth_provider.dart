@@ -75,7 +75,8 @@ class AuthenticationProvider extends BaseProvider {
   }
 
   bool isSignedIn() {
-    return _auth.currentUser != null && !_auth.currentUser!.isAnonymous;
+    // DEMO MODE: bypass auth for offline UI exploration
+    return true;
   }
 
   void setLoading(bool value) {

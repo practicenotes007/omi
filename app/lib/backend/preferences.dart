@@ -308,15 +308,16 @@ class SharedPreferencesUtil {
 
   set transcriptionModel(String value) => saveString('transcriptionModel3', value);
 
-  bool get onboardingCompleted => getBool('onboardingCompleted');
+  // DEMO MODE: default to true so onboarding is always completed
+  bool get onboardingCompleted => getBool('onboardingCompleted', defaultValue: true);
 
   set onboardingCompleted(bool value) => saveBool('onboardingCompleted', value);
 
-  bool get permissionsCompleted => getBool('permissionsCompleted');
+  bool get permissionsCompleted => getBool('permissionsCompleted', defaultValue: true);
 
   set permissionsCompleted(bool value) => saveBool('permissionsCompleted', value);
 
-  bool get aiConsentGiven => getBool('aiConsentGiven');
+  bool get aiConsentGiven => getBool('aiConsentGiven', defaultValue: true);
 
   set aiConsentGiven(bool value) => saveBool('aiConsentGiven', value);
 
