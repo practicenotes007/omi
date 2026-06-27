@@ -389,11 +389,12 @@ class SharedPreferencesUtil {
   set cachedTranscriptionVocabulary(List<String> value) => saveStringList('cachedTranscriptionVocabulary', value);
 
   // User primary language preferences
-  String get userPrimaryLanguage => getString('userPrimaryLanguage');
+  // DEMO MODE: default to English to skip language selection dialog
+  String get userPrimaryLanguage => getString('userPrimaryLanguage', defaultValue: 'en');
 
   set userPrimaryLanguage(String value) => saveString('userPrimaryLanguage', value);
 
-  bool get hasSetPrimaryLanguage => getBool('hasSetPrimaryLanguage');
+  bool get hasSetPrimaryLanguage => getBool('hasSetPrimaryLanguage', defaultValue: true);
 
   set hasSetPrimaryLanguage(bool value) => saveBool('hasSetPrimaryLanguage', value);
 
