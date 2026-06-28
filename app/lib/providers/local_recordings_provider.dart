@@ -347,7 +347,7 @@ class LocalRecordingsProvider extends ChangeNotifier {
         channel: 1,
         status: WalStatus.miss,
         storage: WalStorage.disk,
-        filePath: r.fileName,
+        filePath: r.filePath, // absolute path, _getAudioFilePath checks directly
         device: batchRecordingDevice,
       );
 

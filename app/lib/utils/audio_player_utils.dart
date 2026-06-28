@@ -73,10 +73,19 @@ class AudioPlayerUtils extends ChangeNotifier {
   Future<void> _ensurePlayerInitialized() async {
     if (_audioPlayer != null) return;
 
-    _audioPlayer = FlutterSoundPlayer();
+    try {
+      _audioPlayer = FlutterSoundPlayer();
 
-    if (_audioPlayer != null && !_audioPlayer!.isOpen()) {
-      await _audioPlayer!.openPlayer();
+      if (_audioPlayer != null && !_audioPlayer!.isOpen()) {
+        await _audioPlayer!.openPlayer();
+      }
+    } catch (e) {
+      Logger.error('AudioPlayerUtils: Failed to initialize audio player: $e');
+      _audioPlayer = null;
+      AppSnackbar.showSnackbarError(
+        globalNavigatorKey.currentContext?.l10n.audioPlaybackFailed ?? 'Audio player initialization failed',
+      );
+      rethrow;
     }
   }
 
@@ -107,7 +116,15 @@ class AudioPlayerUtils extends ChangeNotifier {
       return;
     }
 
-    await _startPlayback(wal);
+    try {
+      await _startPlayback(wal);
+    } catch (e) {
+      Logger.error('AudioPlayerUtils: Playback failed for WAL ${wal.id}: $e');
+      _resetPlaybackState();
+      AppSnackbar.showSnackbarError(
+        globalNavigatorKey.currentContext?.l10n.audioPlaybackFailed ?? 'Playback failed. Please try again.',
+      );
+    }
   }
 
   Future<void> _stopPlayback() async {
@@ -249,6 +266,11 @@ class AudioPlayerUtils extends ChangeNotifier {
 
   Future<String?> _getAudioFilePath(Wal wal) async {
     if (wal.filePath != null && wal.filePath!.isNotEmpty) {
+      // Try the file path directly first (absolute path from LocalRecording)
+      final directFile = File(wal.filePath!);
+      if (directFile.existsSync()) return wal.filePath!;
+
+      // Fall back to resolving against app documents dir
       final fullPath = await Wal.getFilePath(wal.filePath);
       if (fullPath != null) {
         final file = File(fullPath);
