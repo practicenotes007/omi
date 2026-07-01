@@ -2,13 +2,15 @@ name: Android Debug Build
 
 on:
   push:
-    branches: [main]
+    branches: [main, demo-offline]
     paths:
       - 'app/**'
+      - '.github/workflows/android_debug_build.yml'
   pull_request:
-    branches: [main]
+    branches: [main, demo-offline]
     paths:
       - 'app/**'
+      - '.github/workflows/android_debug_build.yml'
   workflow_dispatch:
 
 jobs:
@@ -21,6 +23,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Free disk space (remove unused monorepo dirs)
+        working-directory: .
+        run: |
+          echo "Before cleanup:"
+          df -h /
+          rm -rf omi/ omiGlass/ plugins/ web/ desktop/ sdks/ docs/ backend/ mcp/ scripts/ .git/modules/ 2>/dev/null || true
+          echo "After cleanup:"
+          df -h /
 
       - name: Setup Java 21
         uses: actions/setup-java@v4
