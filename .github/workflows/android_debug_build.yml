@@ -22,6 +22,10 @@ jobs:
         working-directory: ./app
 
     steps:
+      - name: Free disk space
+        working-directory: .
+        run: |
+          rm -rf omi/ omiGlass/ plugins/ web/ desktop/ sdks/ docs/ backend/ mcp/ 2>/dev/null || true
       - uses: actions/checkout@v4
 
       - name: Setup Java 21
@@ -33,7 +37,8 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          flutter-version: "3.35.3"
+          channel: "stable"
           cache: true
 
       - name: Install Android NDK
